@@ -19,13 +19,14 @@ images backed on Zendesk and comment out all scripts that involve S3.**
 - Python 2.7
 - Install necessary modules by running this the first time:
 
-		python help_center_scripts/setup.py
+		python scripts/setup.py
 
-- Open `help_center_scripts/file_constants.py` and add your 
-  `<zendesk_sub_domain>` in the appropriate location.
 - Add environment variables: 
+    - Cloudfront URL: `ZENDESK_CLOUDFRONT_URL`
+    - Zendesk subdomain: `ZENDESK_SUBDOMAIN`
 	- Zendesk agent username: `ZENDESK_USR`
 	- Zendesk agent password: `ZENDESK_PWD`
+	- Zendesk AWS bucket name: `ZENDESK_BUCKET_NAME`
 	- AWS Access Key: `AWS_ACCESS_KEY`
 	- AWS Secret Key: `AWS_SECRET_KEY`
 
@@ -33,11 +34,11 @@ images backed on Zendesk and comment out all scripts that involve S3.**
 
 - To download the articles, run:
 
-		python help_center_scripts/get_articles.py
+		python scripts/get_articles.py
 
 - To download the images, run:
 
-		python help_center_scripts/get_images.py
+		python scripts/get_images.py
 
 ## Tracking Changes
 
@@ -75,3 +76,7 @@ To edit past articles, simply edit the HTML files with `track-changes.py`
 running. Local edits can be viewed in the "out" folder and use `deploy.py` as
 outlined above to publish the edits. You must have Zendeks editing capabilities 
 for the article. The final version should also be commited to GitHub.
+
+## License
+
+BSD 3-Clause, see accompanying LICENSE file.

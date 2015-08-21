@@ -7,16 +7,22 @@ import sys
 
 from zdesk import Zendesk
 
-from help_center_scripts import file_constants
+from scripts import file_constants
 
 from colorama import init
 from colorama import Fore
 
 init()
 
-ZENDESK_URL = file_constants.ZENDESK_URL
-
 def main(section_id):
+    # Get subdomain.
+    try:
+        subdomain = os.environ["ZENDESK_SUBDOMAIN"]
+        url = file_constants.get_url_from_subdomain(subdomain)
+    except KeyError:
+        print(Fore.RED + "Please set the environment variable ZENDESK_SUBDOMAIN" + Fore.RESET)
+        sys.exit(1)
+
     # Get username.
     try:
         username = os.environ["ZENDESK_USR"]
@@ -31,7 +37,7 @@ def main(section_id):
         print(Fore.RED + "Please set the environment variable ZENDESK_PWD" + Fore.RESET)
         sys.exit(1)
 
-    zendesk = Zendesk(ZENDESK_URL, username, password)
+    zendesk = Zendesk(url, username, password)
 
     # Add a temporary title and leave it in draft mode.
     new_article = {"article": {"title": "Temporary Title", "draft": True}}

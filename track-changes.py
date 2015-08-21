@@ -6,9 +6,9 @@ import os
 import shutil
 import time
 
-from help_center_scripts import renderer
-from help_center_scripts import startup_changes
-from help_center_scripts import file_constants
+from scripts import renderer
+from scripts import startup_changes
+from scripts import file_constants
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler

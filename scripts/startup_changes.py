@@ -8,7 +8,7 @@ import shutil
 
 import renderer
 
-from help_center_scripts import file_constants
+import file_constants
 
 from filecmp import dircmp
 

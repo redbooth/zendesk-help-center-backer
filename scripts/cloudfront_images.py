@@ -6,7 +6,7 @@ import os
 import sys
 import hashlib
 
-from help_center_scripts import file_constants
+import file_constants
 
 import boto
 import boto.s3
@@ -17,11 +17,10 @@ from colorama import Fore
 init()
 
 IMAGE_FORMATS = file_constants.IMAGE_FORMATS
-BUCKET_NAME = "help-center-images"
 
 def push_to_cloudfront(article_id):
     # Get the environment variable keys to connect with CloudFront.
-    access_key, secret_key = get_aws_keys()
+    bucket_name, access_key, secret_key = get_aws_keys()
     # Establish connection with S3.
     conn = boto.connect_s3(access_key, secret_key)
     # Access the files in the folder for this article_id.
@@ -29,11 +28,10 @@ def push_to_cloudfront(article_id):
     for files in files_in_folder:
         if files.endswith(IMAGE_FORMATS):
             # Push each image.
-            push(article_id, files, conn)
+            push(article_id, files, conn, bucket_name)
 
 
-def push(article_id, img_name, conn):
-    bucket_name = BUCKET_NAME
+def push(article_id, img_name, conn, bucket_name):
     img_path = article_id + "/" + img_name
     post_path = "posts/" + img_path
 
@@ -65,13 +63,13 @@ def push(article_id, img_name, conn):
 
 
 def delete_from_cloudfront(article_id):
-    bucket_name = BUCKET_NAME
-    access_key, secret_key = get_aws_keys()
+    bucket_name, access_key, secret_key = get_aws_keys()
+
     # Establish connection with S3.
     conn = boto.connect_s3(access_key, secret_key)
     if not conn.lookup(bucket_name):
         # If the bucket doesn't exist, there is nothing to delete.
-        sys.exit(0)
+        return
     else:
         # Connect to the bucket.
         bucket = conn.get_bucket(bucket_name)
@@ -92,6 +90,13 @@ def hash_check(post_path):
 
 
 def get_aws_keys():
+    # Get the AWS bucket name.
+    try:
+        bucket = os.environ["ZENDESK_BUCKET_NAME"]
+    except KeyError:
+        print(Fore.RED + "Please set the environment variable ZENDESK_BUCKET_NAME" + Fore.RESET)
+        sys.exit(1)
+
     # Get the AWS access key.
     try:
         access = os.environ["AWS_ACCESS_KEY"]
@@ -106,4 +111,4 @@ def get_aws_keys():
         print(Fore.RED + "Please set the environment variable AWS_SECRET_KEY" + Fore.RESET)
         sys.exit(1)
 
-    return [access,secret]
+    return [bucket, access, secret]

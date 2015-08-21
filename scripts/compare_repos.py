@@ -6,23 +6,19 @@ or if any articles were deleted from Zendesk but not deleted locally.
 import requests
 import os
 
-from help_center_scripts import file_constants
-
 from colorama import init
 from colorama import Fore
 init()
 
-HELP_CENTER_URL = file_constants.ZENDESK_URL + '/api/v2/help_center/articles.json'
-
-def compare_article_ids(username, password):
-    url = HELP_CENTER_URL
+def compare_article_ids(url, username, password):
     zendesk_ids = []
+    url += "/api/v2/help_center/articles.json"
     while url:
         response = requests.get(url, auth=(username, password))
         data = response.json()
-        for article in data['articles']:
-            zendesk_ids.append(article['id'])
-        url = data['next_page']
+        for article in data["articles"]:
+            zendesk_ids.append(article["id"])
+        url = data["next_page"]
 
     local_ids = next(os.walk("posts"))[1]
     local_ids.sort()
@@ -36,9 +32,9 @@ def compare_article_ids(username, password):
             print(Fore.RED + "WARNING: Article number %s was deleted in Zendesk but not deleted in Git." %str(ids) + Fore.RESET)
 
 def compare_article_contents(article_id, zendesk):
-    zendesk_article = zendesk.help_center_article_show(id=article_id)['article']
+    zendesk_article = zendesk.help_center_article_show(id=article_id)["article"]
 
-    title = zendesk_article['title']
+    title = zendesk_article["title"]
 
     # If the title has changed, deploy the article.
     if title != open("posts/%s/title.html" % article_id).readline():
@@ -49,7 +45,7 @@ def compare_article_contents(article_id, zendesk):
         local_body = myfile.read()
 
     # If the bodies are not the same, deploy the article
-    if local_body != zendesk_article['body']:
+    if local_body != zendesk_article["body"]:
         return True
 
     return False
