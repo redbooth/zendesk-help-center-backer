@@ -34,7 +34,7 @@ def render_local_viewing(article):
     os.remove("out/" + article)
     fixed_file = open("out/" + article, 'a')
     title_path = "posts/" + article.split("/")[0] + "/title.html"
-
+    
     if os.path.isfile(title_path) and article.endswith('html'):
         title = open(title_path)
         # Add title to the local file.
@@ -42,7 +42,7 @@ def render_local_viewing(article):
 
     # Give local references to all images and article references.
     for line in original.readlines():
-        fix_lines(line, fixed_file, "local_viewing")
+        fix_lines(line, fixed_file, "local_viewing", None)
 
     original.close()
     fixed_file.close()
