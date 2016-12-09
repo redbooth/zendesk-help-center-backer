@@ -20,6 +20,7 @@ init()
 
 def main(article_id, zendesk_url, cloudfront_url, username, password):
     path = "site/" + article_id + "/index.html"
+    locale = "en-us"
 
     # Check if the article_id is valid.
     if not os.path.exists("posts/" + article_id):
@@ -48,12 +49,12 @@ def main(article_id, zendesk_url, cloudfront_url, username, password):
         return
 
     # Packages the data in a dictionary matching the expected JSON.
-    update_article = {"article": {"title": title, "body": open(path, mode = 'rb').read()}}
+    update_article = {"translation": {"title": title, "body": open(path, mode = 'rb').read()}}
 
-    response = zendesk.help_center_article_update(id = article_id, data = update_article)
+    response = zendesk.help_center_article_translation_update(article_id, locale, update_article)
 
     # Check if article is in Draft mode.
-    check_draft = response["article"]["draft"]
+    check_draft = response["translation"]["draft"]
     if check_draft:
         print (Fore.YELLOW + "Reminder that article " + article_id + " is still in draft mode." + Fore.RESET)
 
