@@ -1,1 +1,8 @@
 *.pyc
+posts/
+.DS_STORE
+out/
+env
+*.egg-info
+
+

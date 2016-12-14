@@ -1,0 +1,5 @@
+watchdog
+boto
+colorama
+zdesk
+
