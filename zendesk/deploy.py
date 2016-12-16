@@ -18,7 +18,7 @@ from scripts import file_constants
 
 init()
 
-def main(article_id, zendesk_url, cloudfront_url, username, password):
+def _deploy(article_id, zendesk_url, cloudfront_url, username, password):
     path = "site/" + article_id + "/index.html"
     locale = "en-us"
 
@@ -61,7 +61,7 @@ def main(article_id, zendesk_url, cloudfront_url, username, password):
     print "Article " + article_id + " has been updated at: " + zendesk_url + "/" + article_id
 
 
-if __name__ == '__main__':
+def main():
     # Get subdomain.
     try:
         cloudfront_url = os.environ["ZENDESK_CLOUDFRONT_URL"]
@@ -97,13 +97,13 @@ if __name__ == '__main__':
 
     if len(sys.argv) == 2:
         print (Fore.MAGENTA + "Processing Article 1/1" + Fore.RESET)
-        main(sys.argv[1], zendesk_url, cloudfront_url, username, password)
+        _deploy(sys.argv[1], zendesk_url, cloudfront_url, username, password)
     else:
         article_ids = next(os.walk("posts"))[1]
         i = 1
         for article_id in article_ids:
             print (Fore.MAGENTA + "Processing Article %s/%s %s" % (str(i), len(article_ids), article_id) + Fore.RESET)
-            main(article_id, zendesk_url, cloudfront_url, username, password)
+            _deploy(article_id, zendesk_url, cloudfront_url, username, password)
             i += 1
 
     print "="*40

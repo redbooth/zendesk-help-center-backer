@@ -14,7 +14,8 @@ from colorama import Fore
 
 init()
 
-def main(section_id):
+def _create_shell(section_id):
+
     # Get subdomain.
     try:
         subdomain = os.environ["ZENDESK_SUBDOMAIN"]
@@ -49,14 +50,14 @@ def main(section_id):
 
     # Create the article shell locally.
     article_id = response['article']['id']
-    create_shell(str(article_id))
+    _empty_article(str(article_id))
 
 
-def create_shell(article_id):
+def _empty_article(article_id):
     article = "posts/" + article_id + "/index.html"
     title = "posts/" + article_id + "/title.html"
-    # The ID must be nine numbers.
-    if len(article_id) == 9 and article_id.isdigit() and not os.path.isfile(article):
+ 
+    if article_id.isdigit() and not os.path.isfile(article):
         # Makes the folder for the article and pictures to be placed in.
         os.makedirs('posts/' + article_id)
         # Create the article and title shell.
@@ -72,8 +73,8 @@ def create_shell(article_id):
         print (Fore.RED + "Error: This article ID is invalid: " + article_id + Fore.RESET)
         sys.exit(1)
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) != 2:
         print('Usage: python %s <section_id>' % sys.argv[0])
     else:
-        main(sys.argv[1])
+        _create_shell(sys.argv[1])
