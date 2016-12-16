@@ -7,7 +7,7 @@ with open('requirements.txt', 'r') as f:
 
 setuptools.setup(   
     name='zendesk-help-center-backer',
-    version='0.1',
+    version='0.2',
     description='A Zendesk help center backer written in Python',
     long_description='A Zendesk help center backer written in Python',
     keywords='zendesk,solution,help center,knowledge base',
